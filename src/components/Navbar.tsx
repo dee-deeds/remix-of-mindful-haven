@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Heart, Menu, X, Moon, Sun } from "lucide-react";
+import { Heart, Menu, X, Moon, Sun, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/useTheme";
+import { useAuth } from "@/contexts/AuthContext";
 
-const navLinks = [
+const publicLinks = [
   { label: "Home", path: "/" },
   { label: "Resources", path: "/resources" },
   { label: "Counselors", path: "/counselors" },
-  { label: "Self-Assessment", path: "/assessment" },
   { label: "Community", path: "/community" },
+  { label: "Events", path: "/events" },
   { label: "Emergency", path: "/emergency" },
 ];
 
@@ -17,6 +18,7 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
+  const { user, signOut } = useAuth();
 
   return (
     <nav className="sticky top-0 z-50 border-b bg-card/80 backdrop-blur-md">
@@ -28,7 +30,7 @@ export function Navbar() {
 
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-1">
-          {navLinks.map((link) => (
+          {publicLinks.map((link) => (
             <Link
               key={link.path}
               to={link.path}
@@ -47,9 +49,27 @@ export function Navbar() {
           <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme">
             {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
-          <Link to="/dashboard">
-            <Button className="rounded-xl font-display">Dashboard</Button>
-          </Link>
+          {user ? (
+            <>
+              <Link to="/dashboard">
+                <Button variant="outline" className="rounded-xl font-display gap-2">
+                  <User className="h-4 w-4" /> Dashboard
+                </Button>
+              </Link>
+              <Button variant="ghost" size="icon" onClick={signOut} aria-label="Sign out">
+                <LogOut className="h-5 w-5" />
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link to="/login">
+                <Button variant="ghost" className="rounded-xl font-display">Log In</Button>
+              </Link>
+              <Link to="/signup">
+                <Button className="rounded-xl font-display">Sign Up</Button>
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile toggle */}
@@ -66,7 +86,7 @@ export function Navbar() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="md:hidden border-t bg-card px-4 pb-4 animate-fade-in">
-          {navLinks.map((link) => (
+          {publicLinks.map((link) => (
             <Link
               key={link.path}
               to={link.path}
@@ -80,9 +100,25 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
-          <Link to="/dashboard" onClick={() => setMobileOpen(false)}>
-            <Button className="w-full mt-2 rounded-xl font-display">Dashboard</Button>
-          </Link>
+          {user ? (
+            <>
+              <Link to="/dashboard" onClick={() => setMobileOpen(false)}>
+                <Button className="w-full mt-2 rounded-xl font-display">Dashboard</Button>
+              </Link>
+              <Button variant="ghost" className="w-full mt-2 rounded-xl font-display gap-2" onClick={() => { signOut(); setMobileOpen(false); }}>
+                <LogOut className="h-4 w-4" /> Sign Out
+              </Button>
+            </>
+          ) : (
+            <div className="flex gap-2 mt-2">
+              <Link to="/login" onClick={() => setMobileOpen(false)} className="flex-1">
+                <Button variant="outline" className="w-full rounded-xl font-display">Log In</Button>
+              </Link>
+              <Link to="/signup" onClick={() => setMobileOpen(false)} className="flex-1">
+                <Button className="w-full rounded-xl font-display">Sign Up</Button>
+              </Link>
+            </div>
+          )}
         </div>
       )}
     </nav>

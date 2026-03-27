@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Search, Bookmark, BookmarkCheck, Play, FileText, ExternalLink } from "lucide-react";
+import { Search, Bookmark, BookmarkCheck, Play, FileText, ExternalLink, Lock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/contexts/AuthContext";
+import { LoginPrompt } from "@/components/LoginPrompt";
 
 const categories = ["All", "Anxiety", "Depression", "Academic Stress", "Relationships", "Self-Care"];
 
@@ -23,8 +25,11 @@ export default function Resources() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [bookmarks, setBookmarks] = useState<number[]>([]);
+  const [showLogin, setShowLogin] = useState(false);
+  const { user } = useAuth();
 
   const toggleBookmark = (id: number) => {
+    if (!user) { setShowLogin(true); return; }
     setBookmarks((prev) => prev.includes(id) ? prev.filter((b) => b !== id) : [...prev, id]);
   };
 
@@ -45,22 +50,11 @@ export default function Resources() {
       <div className="mb-6 space-y-4">
         <div className="relative max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search resources..."
-            className="pl-10 rounded-xl"
-          />
+          <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search resources..." className="pl-10 rounded-xl" />
         </div>
         <div className="flex flex-wrap gap-2">
           {categories.map((cat) => (
-            <Button
-              key={cat}
-              variant={activeCategory === cat ? "default" : "outline"}
-              size="sm"
-              onClick={() => setActiveCategory(cat)}
-              className="rounded-full"
-            >
+            <Button key={cat} variant={activeCategory === cat ? "default" : "outline"} size="sm" onClick={() => setActiveCategory(cat)} className="rounded-full">
               {cat}
             </Button>
           ))}
@@ -74,24 +68,14 @@ export default function Resources() {
             <CardContent className="p-6">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex gap-2">
-                  <Badge variant="secondary" className="rounded-full text-xs">
-                    {resource.category}
-                  </Badge>
+                  <Badge variant="secondary" className="rounded-full text-xs">{resource.category}</Badge>
                   <Badge variant="outline" className="rounded-full text-xs gap-1">
                     {resource.type === "video" ? <Play className="h-3 w-3" /> : <FileText className="h-3 w-3" />}
                     {resource.type}
                   </Badge>
                 </div>
-                <button
-                  onClick={() => toggleBookmark(resource.id)}
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                  aria-label={bookmarks.includes(resource.id) ? "Remove bookmark" : "Add bookmark"}
-                >
-                  {bookmarks.includes(resource.id) ? (
-                    <BookmarkCheck className="h-5 w-5 text-primary" />
-                  ) : (
-                    <Bookmark className="h-5 w-5" />
-                  )}
+                <button onClick={() => toggleBookmark(resource.id)} className="text-muted-foreground hover:text-primary transition-colors" aria-label="Bookmark">
+                  {user && bookmarks.includes(resource.id) ? <BookmarkCheck className="h-5 w-5 text-primary" /> : <Bookmark className="h-5 w-5" />}
                 </button>
               </div>
               <h3 className="font-display font-bold mb-2 group-hover:text-primary transition-colors">{resource.title}</h3>
@@ -112,6 +96,8 @@ export default function Resources() {
           <p className="text-muted-foreground">No resources found. Try adjusting your search or filters.</p>
         </div>
       )}
+
+      <LoginPrompt open={showLogin} onOpenChange={setShowLogin} action="save resources" />
     </div>
   );
 }
