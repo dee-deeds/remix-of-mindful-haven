@@ -16,7 +16,6 @@ import Assessment from "./pages/Assessment";
 import Community from "./pages/Community";
 import Booking from "./pages/Booking";
 import Emergency from "./pages/Emergency";
-import Events from "./pages/Events";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
@@ -34,17 +33,14 @@ const App = () => (
             <Navbar />
             <main className="flex-1">
               <Routes>
-                {/* Public routes */}
                 <Route path="/" element={<Index />} />
                 <Route path="/resources" element={<Resources />} />
                 <Route path="/counselors" element={<Counselors />} />
                 <Route path="/community" element={<Community />} />
-                <Route path="/events" element={<Events />} />
                 <Route path="/emergency" element={<Emergency />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
 
-                {/* Protected routes */}
                 <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path="/assessment" element={<ProtectedRoute><Assessment /></ProtectedRoute>} />
                 <Route path="/booking" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
