@@ -1,18 +1,16 @@
 import { useState } from "react";
-import { Search, Bookmark, BookmarkCheck, Play, FileText, ExternalLink, Lock } from "lucide-react";
+import { Search, Bookmark, BookmarkCheck, Play, FileText, ExternalLink } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useAuth } from "@/contexts/AuthContext";
-import { LoginPrompt } from "@/components/LoginPrompt";
 
 const categories = ["All", "Anxiety", "Depression", "Academic Stress", "Relationships", "Self-Care"];
 
 const resources = [
   { id: 1, title: "Understanding Anxiety: A Student's Guide", category: "Anxiety", type: "article", desc: "Learn about anxiety symptoms, triggers, and coping mechanisms specifically for university students.", readTime: "5 min" },
   { id: 2, title: "5-Minute Breathing Exercise", category: "Self-Care", type: "video", desc: "A guided breathing technique to help you calm down during stressful moments.", readTime: "5 min" },
-  { id: 3, title: "Dealing with Academic Pressure", category: "Academic Stress", type: "article", desc: "Practical tips for managing workload, deadlines, and exam anxiety at JKUAT.", readTime: "8 min" },
+  { id: 3, title: "Dealing with Academic Pressure", category: "Academic Stress", type: "article", desc: "Practical tips for managing workload, deadlines, and exam anxiety.", readTime: "8 min" },
   { id: 4, title: "Signs of Depression in Young Adults", category: "Depression", type: "article", desc: "Recognize the early signs and know when to seek professional help.", readTime: "6 min" },
   { id: 5, title: "Healthy Relationship Boundaries", category: "Relationships", type: "article", desc: "Setting and maintaining healthy boundaries in friendships and romantic relationships.", readTime: "7 min" },
   { id: 6, title: "Mindfulness Meditation for Beginners", category: "Self-Care", type: "video", desc: "Start your mindfulness journey with this beginner-friendly guided meditation.", readTime: "10 min" },
@@ -25,11 +23,8 @@ export default function Resources() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [bookmarks, setBookmarks] = useState<number[]>([]);
-  const [showLogin, setShowLogin] = useState(false);
-  const { user } = useAuth();
 
   const toggleBookmark = (id: number) => {
-    if (!user) { setShowLogin(true); return; }
     setBookmarks((prev) => prev.includes(id) ? prev.filter((b) => b !== id) : [...prev, id]);
   };
 
@@ -75,7 +70,7 @@ export default function Resources() {
                   </Badge>
                 </div>
                 <button onClick={() => toggleBookmark(resource.id)} className="text-muted-foreground hover:text-primary transition-colors" aria-label="Bookmark">
-                  {user && bookmarks.includes(resource.id) ? <BookmarkCheck className="h-5 w-5 text-primary" /> : <Bookmark className="h-5 w-5" />}
+                  {bookmarks.includes(resource.id) ? <BookmarkCheck className="h-5 w-5 text-primary" /> : <Bookmark className="h-5 w-5" />}
                 </button>
               </div>
               <h3 className="font-display font-bold mb-2 group-hover:text-primary transition-colors">{resource.title}</h3>
@@ -97,7 +92,6 @@ export default function Resources() {
         </div>
       )}
 
-      <LoginPrompt open={showLogin} onOpenChange={setShowLogin} action="save resources" />
     </div>
   );
 }

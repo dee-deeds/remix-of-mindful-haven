@@ -48,7 +48,7 @@ export default function Booking() {
             <p className="text-xs text-muted-foreground">You'll receive a confirmation email with details.</p>
             <div className="flex gap-3 justify-center">
               <Link to="/dashboard"><Button variant="outline" className="rounded-xl">Go to Dashboard</Button></Link>
-              <Link to="/counselors"><Button className="rounded-xl">View Counselors</Button></Link>
+              <Link to="/dashboard/counselors"><Button className="rounded-xl">View Counselors</Button></Link>
             </div>
           </CardContent>
         </Card>
@@ -58,7 +58,7 @@ export default function Booking() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-2xl">
-      <Link to="/counselors" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4">
+      <Link to="/dashboard/counselors" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4">
         <ArrowLeft className="h-4 w-4" /> Back to Counselors
       </Link>
 

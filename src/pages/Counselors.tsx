@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { Star, MapPin, Clock, Calendar, Lock } from "lucide-react";
+import { Star, MapPin, Clock, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
-import { LoginPrompt } from "@/components/LoginPrompt";
 
 const specializations = ["All", "Anxiety & Stress", "Depression", "Relationships", "Academic", "Trauma", "Addiction"];
 
@@ -20,14 +18,8 @@ const counselors = [
 
 export default function Counselors() {
   const [activeSpec, setActiveSpec] = useState("All");
-  const [showLogin, setShowLogin] = useState(false);
-  const { user } = useAuth();
 
   const filtered = counselors.filter((c) => activeSpec === "All" || c.specialization === activeSpec);
-
-  const handleBook = () => {
-    if (!user) { setShowLogin(true); return; }
-  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -73,23 +65,16 @@ export default function Counselors() {
                 <div className="text-sm text-muted-foreground">{counselor.experience} experience</div>
               </div>
 
-              {user ? (
-                <Link to="/booking">
-                  <Button className="w-full rounded-xl font-display gap-2">
-                    <Calendar className="h-4 w-4" /> Book Appointment
-                  </Button>
-                </Link>
-              ) : (
-                <Button onClick={handleBook} variant="outline" className="w-full rounded-xl font-display gap-2">
-                  <Lock className="h-4 w-4" /> Sign in to Book
+              <Link to="/dashboard/booking">
+                <Button className="w-full rounded-xl font-display gap-2">
+                  <Calendar className="h-4 w-4" /> Book Appointment
                 </Button>
-              )}
+              </Link>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <LoginPrompt open={showLogin} onOpenChange={setShowLogin} action="book an appointment" />
     </div>
   );
 }

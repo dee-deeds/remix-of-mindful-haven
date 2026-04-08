@@ -1,14 +1,12 @@
 import { useState } from "react";
-import { Heart, MessageCircle, Share2, Shield, Send, Eye, EyeOff, Lock } from "lucide-react";
+import { Heart, MessageCircle, Share2, Shield, Send, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
-import { LoginPrompt } from "@/components/LoginPrompt";
 
 const initialPosts = [
   { id: 1, author: "Anonymous", isAnon: true, content: "I've been feeling overwhelmed with assignments this semester. Anyone else? How do you cope?", likes: 12, replies: 5, time: "2 hours ago", category: "Academic Stress" },
@@ -19,15 +17,13 @@ const initialPosts = [
 ];
 
 export default function Community() {
+  const { user } = useAuth();
   const [posts, setPosts] = useState(initialPosts);
   const [newPost, setNewPost] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(true);
   const [likedPosts, setLikedPosts] = useState<number[]>([]);
-  const [showLogin, setShowLogin] = useState(false);
-  const { user } = useAuth();
 
   const handlePost = () => {
-    if (!user) { setShowLogin(true); return; }
     if (!newPost.trim()) return;
     setPosts([
       { id: Date.now(), author: isAnonymous ? "Anonymous" : "You", isAnon: isAnonymous, content: newPost, likes: 0, replies: 0, time: "Just now", category: "General" },
@@ -37,13 +33,8 @@ export default function Community() {
   };
 
   const toggleLike = (id: number) => {
-    if (!user) { setShowLogin(true); return; }
     setLikedPosts((prev) => prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id]);
     setPosts((prev) => prev.map((p) => p.id === id ? { ...p, likes: likedPosts.includes(id) ? p.likes - 1 : p.likes + 1 } : p));
-  };
-
-  const handleInteraction = () => {
-    if (!user) { setShowLogin(true); return; }
   };
 
   return (
@@ -58,7 +49,7 @@ export default function Community() {
         <CardContent className="p-4 flex items-start gap-3">
           <Shield className="h-5 w-5 text-calm mt-0.5 shrink-0" />
           <div className="text-sm text-muted-foreground">
-            <strong className="text-foreground">Community Guidelines:</strong> This is a safe, judgment-free zone. Be respectful, supportive, and kind. If you or someone is in crisis, please visit our <a href="/emergency" className="text-destructive font-medium hover:underline">Emergency page</a>.
+            <strong className="text-foreground">Community Guidelines:</strong> This is a safe, judgment-free zone. Be respectful, supportive, and kind. If you or someone is in crisis, please visit our <a href="/dashboard/emergency" className="text-destructive font-medium hover:underline">Emergency page</a>.
           </div>
         </CardContent>
       </Card>
@@ -72,22 +63,19 @@ export default function Community() {
           <Textarea
             value={newPost}
             onChange={(e) => setNewPost(e.target.value)}
-            placeholder={user ? "How are you feeling? What's on your mind?" : "Sign in to share your thoughts..."}
+            placeholder="How are you feeling? What's on your mind?"
             className="rounded-xl min-h-[100px]"
-            onClick={() => { if (!user) setShowLogin(true); }}
-            readOnly={!user}
           />
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Switch id="anon" checked={isAnonymous} onCheckedChange={setIsAnonymous} disabled={!user} />
+              <Switch id="anon" checked={isAnonymous} onCheckedChange={setIsAnonymous} />
               <Label htmlFor="anon" className="text-sm flex items-center gap-1">
                 {isAnonymous ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
                 {isAnonymous ? "Post anonymously" : "Post with name"}
               </Label>
             </div>
             <Button onClick={handlePost} className="rounded-xl gap-2">
-              {user ? <Send className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
-              {user ? "Post" : "Sign in to Post"}
+              <Send className="h-4 w-4" /> Post
             </Button>
           </div>
         </CardContent>
@@ -114,10 +102,10 @@ export default function Community() {
                   <Heart className={`h-4 w-4 ${user && likedPosts.includes(post.id) ? "fill-primary text-primary" : ""}`} />
                   {post.likes}
                 </button>
-                <button onClick={handleInteraction} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
                   <MessageCircle className="h-4 w-4" /> {post.replies}
                 </button>
-                <button onClick={handleInteraction} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
                   <Share2 className="h-4 w-4" /> Share
                 </button>
               </div>
@@ -126,7 +114,6 @@ export default function Community() {
         ))}
       </div>
 
-      <LoginPrompt open={showLogin} onOpenChange={setShowLogin} action="participate in the community" />
     </div>
   );
 }

@@ -1,12 +1,18 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Heart, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Heart, Mail, Lock, Eye, EyeOff, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+
+interface LocationState {
+  from?: string;
+  expired?: boolean;
+}
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -14,7 +20,23 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
+  const { user, loading: authLoading } = useAuth();
+
+  const state = (location.state ?? {}) as LocationState;
+  // Where to go after login — default to dashboard
+  const returnTo = state.from ?? "/dashboard";
+  const wasExpired = state.expired === true;
+
+  // If already logged in, skip the login page entirely
+  useEffect(() => {
+    if (!authLoading && user) {
+      navigate(returnTo, { replace: true });
+    }
+  }, [user, authLoading, navigate, returnTo]);
+
+  if (authLoading || user) return null;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +47,8 @@ export default function Login() {
     if (error) {
       toast({ title: "Login failed", description: error.message, variant: "destructive" });
     } else {
-      navigate("/dashboard");
+      // Replace so the user can't hit Back and land on the login page
+      navigate(returnTo, { replace: true });
     }
   };
 
@@ -40,6 +63,21 @@ export default function Login() {
           <p className="text-sm text-muted-foreground">Sign in to access your dashboard</p>
         </CardHeader>
         <CardContent>
+          {/* Session-expired notice */}
+          {wasExpired && (
+            <div className="flex items-start gap-3 mb-4 rounded-xl bg-warning/10 border border-warning/20 px-4 py-3 text-sm text-foreground">
+              <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0 text-warning" />
+              <span>Your session expired. Please sign in again to continue.</span>
+            </div>
+          )}
+
+          {/* Return-path notice (non-expired redirects) */}
+          {!wasExpired && returnTo !== "/dashboard" && (
+            <div className="mb-4 rounded-xl bg-muted px-4 py-3 text-sm text-muted-foreground">
+              Sign in to continue to <span className="font-medium text-foreground">{returnTo}</span>
+            </div>
+          )}
+
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -53,6 +91,7 @@ export default function Login() {
                   placeholder="your@email.com"
                   className="pl-10 rounded-xl"
                   required
+                  autoFocus
                 />
               </div>
             </div>
@@ -69,18 +108,24 @@ export default function Login() {
                   className="pl-10 pr-10 rounded-xl"
                   required
                 />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
             </div>
             <Button type="submit" className="w-full rounded-xl font-display" disabled={loading}>
-              {loading ? "Signing in..." : "Sign In"}
+              {loading ? "Signing in…" : "Sign In"}
             </Button>
           </form>
           <p className="text-center text-sm text-muted-foreground mt-6">
             Don't have an account?{" "}
-            <Link to="/signup" className="text-primary font-medium hover:underline">Sign up</Link>
+            <Link to="/signup" className="text-primary font-medium hover:underline">
+              Sign up
+            </Link>
           </p>
         </CardContent>
       </Card>

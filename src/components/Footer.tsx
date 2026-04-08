@@ -12,7 +12,7 @@ export function Footer() {
               <span className="font-display text-lg font-bold">MindCare</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              Supporting JKUAT students' mental health and wellbeing. You're never alone.
+              Supporting  students' mental health and wellbeing. You're never alone.
             </p>
           </div>
 
@@ -40,10 +40,10 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-display font-semibold mb-3">Contact JKUAT</h4>
+            <h4 className="font-display font-semibold mb-3">Contact </h4>
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground flex items-center gap-1">
-                <Mail className="h-3 w-3" /> counseling@jkuat.ac.ke
+                <Mail className="h-3 w-3" /> counseling@contact.ac.ke
               </p>
               <p className="text-sm text-muted-foreground flex items-center gap-1">
                 <MapPin className="h-3 w-3" /> Student Affairs Office
@@ -53,7 +53,7 @@ export function Footer() {
         </div>
 
         <div className="border-t mt-8 pt-6 text-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} MindCare JKUAT. Built with 💗 for student wellbeing.</p>
+          <p>© {new Date().getFullYear()} MindCare. Built with 💗 for student wellbeing.</p>
         </div>
       </div>
     </footer>
