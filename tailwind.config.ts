@@ -26,10 +26,13 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          fixed: "hsl(var(--primary-fixed))",
+          container: "hsl(var(--primary-container))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
+          container: "hsl(var(--secondary-container))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -63,6 +66,17 @@ export default {
           DEFAULT: "hsl(var(--calm))",
           foreground: "hsl(var(--calm-foreground))",
         },
+        surface: {
+          DEFAULT: "hsl(var(--surface))",
+          container: "hsl(var(--surface-container))",
+          "container-low": "hsl(var(--surface-container-low))",
+          "container-high": "hsl(var(--surface-container-high))",
+          "container-lowest": "hsl(var(--surface-container-lowest))",
+        },
+        "on-surface-variant": "hsl(var(--on-surface-variant))",
+        "outline-variant": "hsl(var(--outline-variant))",
+        "inverse-surface": "hsl(var(--inverse-surface))",
+        "inverse-on-surface": "hsl(var(--inverse-on-surface))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -78,6 +92,8 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        xl: "2rem",
+        "2xl": "3rem",
       },
       keyframes: {
         "accordion-down": {
@@ -100,6 +116,10 @@ export default {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.7" },
         },
+        "breathing": {
+          "0%, 100%": { transform: "scale(1)", opacity: "0.15" },
+          "50%": { transform: "scale(1.1)", opacity: "0.25" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -107,6 +127,7 @@ export default {
         "fade-in": "fade-in 0.5s ease-out forwards",
         "float": "float 3s ease-in-out infinite",
         "pulse-gentle": "pulse-gentle 2s ease-in-out infinite",
+        "breathing": "breathing 8s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
     },
   },

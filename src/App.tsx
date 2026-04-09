@@ -15,7 +15,6 @@ import Assessment from "./pages/Assessment";
 import Community from "./pages/Community";
 import Booking from "./pages/Booking";
 import Emergency from "./pages/Emergency";
-import Events from "./pages/Events";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";

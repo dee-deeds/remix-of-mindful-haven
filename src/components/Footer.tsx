@@ -1,7 +1,11 @@
-import { Heart, Phone, Mail, MapPin } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export function Footer() {
+  const location = useLocation();
+
+  // Hide footer on emergency page
+  if (location.pathname === "/emergency") return null;
+
   return (
     <footer className="border-t bg-card mt-auto">
       <div className="container mx-auto px-4 py-12">

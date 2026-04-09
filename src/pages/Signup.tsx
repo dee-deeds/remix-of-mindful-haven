@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Heart, Mail, Lock, User, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
@@ -50,75 +49,74 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4">
-      <Card className="w-full max-w-md rounded-2xl">
-        <CardHeader className="text-center space-y-2">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
-            <Heart className="h-6 w-6 text-primary fill-primary" />
-          </div>
-          <CardTitle className="font-display text-2xl">Create Your Account</CardTitle>
-          <p className="text-sm text-muted-foreground">Join MindCare to access all features</p>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSignup} className="space-y-4">
+    <div className="min-h-screen flex items-center justify-center px-6 pt-20">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-10">
+          <h1 className="font-headline text-4xl font-extrabold tracking-tighter mb-3">Join the Sanctuary</h1>
+          <p className="text-on-surface-variant">Create your account to access all features</p>
+        </div>
+
+        <div className="bg-card rounded-xl p-8 md:p-10 editorial-shadow">
+          <form onSubmit={handleSignup} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
+              <Label htmlFor="name" className="text-sm font-bold">Full Name</Label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Your name"
-                  className="pl-10 rounded-xl"
+                  className="pl-12 rounded-xl bg-surface-container-high border-none h-12"
                   required
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-sm font-bold">Email</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
-                  className="pl-10 rounded-xl"
+                  className="pl-12 rounded-xl bg-surface-container-high border-none h-12"
                   required
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-sm font-bold">Password</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="pl-10 pr-10 rounded-xl"
+                  className="pl-12 pr-12 rounded-xl bg-surface-container-high border-none h-12"
                   required
                   minLength={6}
                 />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
             </div>
-            <Button type="submit" className="w-full rounded-xl font-display" disabled={loading}>
+            <Button type="submit" className="w-full rounded-full font-headline h-12" disabled={loading}>
               {loading ? "Creating account..." : "Create Account"}
             </Button>
           </form>
-          <p className="text-center text-sm text-muted-foreground mt-6">
-            Already have an account?{" "}
-            <Link to="/login" className="text-primary font-medium hover:underline">Log in</Link>
-          </p>
-        </CardContent>
-      </Card>
+        </div>
+
+        <p className="text-center text-sm text-muted-foreground mt-8">
+          Already have an account?{" "}
+          <Link to="/login" className="text-primary font-bold hover:underline">Sign in</Link>
+        </p>
+      </div>
     </div>
   );
 }
