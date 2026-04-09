@@ -468,5 +468,6 @@ export default function Dashboard() {
         </div>
       </div>
     </DashboardLayout>
+    </DashboardLayout>
   );
 }

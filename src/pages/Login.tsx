@@ -80,7 +80,9 @@ export default function Login() {
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-bold">Email</Label>
+              <Label htmlFor="email" className="text-sm font-bold">Email</Label>
               <div className="relative">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="email"
@@ -89,6 +91,7 @@ export default function Login() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
                   className="pl-12 rounded-xl bg-surface-container-high border-none h-12"
+                  className="pl-12 rounded-xl bg-surface-container-high border-none h-12"
                   required
                   autoFocus
                 />
@@ -96,7 +99,9 @@ export default function Login() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="password" className="text-sm font-bold">Password</Label>
+              <Label htmlFor="password" className="text-sm font-bold">Password</Label>
               <div className="relative">
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="password"
@@ -104,6 +109,7 @@ export default function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
+                  className="pl-12 pr-12 rounded-xl bg-surface-container-high border-none h-12"
                   className="pl-12 pr-12 rounded-xl bg-surface-container-high border-none h-12"
                   required
                 />
