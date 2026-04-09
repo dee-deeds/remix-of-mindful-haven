@@ -4,9 +4,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { ChatBot } from "@/components/ChatBot";
+import { PublicLayout } from "@/components/PublicLayout";
+import { DashboardLayout } from "@/components/DashboardLayout";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
@@ -29,28 +28,38 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <div className="min-h-screen flex flex-col">
-            <Navbar />
-            <main className="flex-1">
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/resources" element={<Resources />} />
-                <Route path="/counselors" element={<Counselors />} />
-                <Route path="/community" element={<Community />} />
-                <Route path="/emergency" element={<Emergency />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
+          <Routes>
+            {/* Public routes — blog-like with top Navbar + Footer */}
+            <Route element={<PublicLayout />}>
+              <Route index element={<Index />} />
+              <Route path="resources" element={<Resources />} />
+              <Route path="counselors" element={<Counselors />} />
+              <Route path="community" element={<Community />} />
+              <Route path="events" element={<Events />} />
+              <Route path="emergency" element={<Emergency />} />
+              <Route path="login" element={<Login />} />
+              <Route path="signup" element={<Signup />} />
+            </Route>
 
-                <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-                <Route path="/assessment" element={<ProtectedRoute><Assessment /></ProtectedRoute>} />
-                <Route path="/booking" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
+            {/* Dashboard routes — personalized sidebar layout, all protected */}
+            <Route element={<ProtectedRoute />}>
+              <Route element={<DashboardLayout />}>
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="dashboard/assessment" element={<Assessment />} />
+                <Route path="dashboard/booking" element={<Booking />} />
+                <Route path="dashboard/resources" element={<Resources />} />
+                <Route path="dashboard/counselors" element={<Counselors />} />
+                <Route path="dashboard/community" element={<Community />} />
+                <Route path="dashboard/events" element={<Events />} />
+                <Route path="dashboard/emergency" element={<Emergency />} />
+              </Route>
+            </Route>
 
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-            <Footer />
-            <ChatBot />
-          </div>
+            {/* Fallback */}
+            <Route element={<PublicLayout />}>
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>

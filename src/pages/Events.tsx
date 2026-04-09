@@ -3,8 +3,6 @@ import { Calendar, Clock, MapPin, Users, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useAuth } from "@/contexts/AuthContext";
-import { LoginPrompt } from "@/components/LoginPrompt";
 
 const events = [
   { id: 1, title: "Stress Management Workshop", date: "Apr 5, 2026", time: "2:00 PM", location: "JKUAT Main Hall", type: "In-Person", attendees: 45, category: "Workshop", desc: "Learn practical techniques to manage stress during exam season." },
@@ -15,15 +13,10 @@ const events = [
 ];
 
 export default function Events() {
-  const { user } = useAuth();
-  const [showLogin, setShowLogin] = useState(false);
+  const [registered, setRegistered] = useState<number[]>([]);
 
-  const handleRegister = () => {
-    if (!user) {
-      setShowLogin(true);
-      return;
-    }
-    // TODO: Register for event
+  const handleRegister = (id: number) => {
+    setRegistered((prev) => prev.includes(id) ? prev : [...prev, id]);
   };
 
   return (
@@ -60,15 +53,19 @@ export default function Events() {
                   <Users className="h-4 w-4" /> {event.attendees} attending
                 </div>
               </div>
-              <Button onClick={handleRegister} className="w-full rounded-xl font-display">
-                {user ? "Register" : "Log in to Register"}
+              <Button
+                onClick={() => handleRegister(event.id)}
+                variant={registered.includes(event.id) ? "outline" : "default"}
+                className="w-full rounded-xl font-display"
+                disabled={registered.includes(event.id)}
+              >
+                {registered.includes(event.id) ? "Registered ✓" : "Register"}
               </Button>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <LoginPrompt open={showLogin} onOpenChange={setShowLogin} action="register for events" />
     </div>
   );
 }

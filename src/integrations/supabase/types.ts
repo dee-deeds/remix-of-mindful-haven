@@ -14,7 +14,55 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      mood_logs: {
+        Row: {
+          id: string
+          user_id: string
+          mood_value: number
+          note: string | null
+          logged_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          mood_value: number
+          note?: string | null
+          logged_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          mood_value?: number
+          note?: string | null
+          logged_at?: string
+        }
+      }
+      assessment_results: {
+        Row: {
+          id: string
+          user_id: string
+          score: number
+          level: string
+          answers: Json
+          taken_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          score: number
+          level: string
+          answers: Json
+          taken_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          score?: number
+          level?: string
+          answers?: Json
+          taken_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never
