@@ -1,4 +1,5 @@
-import { Heart, Phone, Mail, MapPin } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
+import logo from "@/assets/logo.png";
 import { Link } from "react-router-dom";
 
 export function Footer() {
@@ -7,9 +8,8 @@ export function Footer() {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <Heart className="h-6 w-6 text-primary fill-primary" />
-              <span className="font-display text-lg font-bold">MindCare</span>
+            <div className="mb-4">
+              <img src={logo} alt="MindCare" className="h-9 w-auto" />
             </div>
             <p className="text-sm text-muted-foreground">
               Supporting  students' mental health and wellbeing. You're never alone.

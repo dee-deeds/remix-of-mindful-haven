@@ -3,7 +3,7 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, Brain, Calendar, BookOpen,
   Users, UserSearch, AlertTriangle, LogOut, Menu, X,
-  Moon, Sun, Heart, ChevronRight, CalendarDays,
+  Moon, Sun, ChevronRight, CalendarDays,
   PanelLeftClose, PanelLeftOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/hooks/useTheme";
+import logo from "@/assets/logo.png";
 
 const COLLAPSE_KEY = "sidebar-collapsed";
 
@@ -123,14 +124,13 @@ export function DashboardLayout() {
         {/* Brand + collapse toggle */}
         <div className={`flex items-center border-b shrink-0 ${collapsed ? "flex-col gap-2 py-4 px-2" : "justify-between px-4 h-16"}`}>
           {!collapsed && (
-            <Link to="/" className="flex items-center gap-2 min-w-0">
-              <Heart className="h-5 w-5 text-primary fill-primary shrink-0" />
-              <span className="font-display font-bold text-base truncate">MindCare</span>
+            <Link to="/" className="flex items-center min-w-0">
+              <img src={logo} alt="MindCare" className="h-8 w-auto" />
             </Link>
           )}
           {collapsed && (
             <Link to="/">
-              <Heart className="h-6 w-6 text-primary fill-primary" />
+              <img src={logo} alt="MindCare" className="h-7 w-auto" />
             </Link>
           )}
           <button
@@ -235,9 +235,8 @@ export function DashboardLayout() {
         {/* Mobile header */}
         <header className="lg:hidden sticky top-0 z-50 border-b bg-card/80 backdrop-blur-md shrink-0">
           <div className="flex items-center justify-between px-4 h-14">
-            <Link to="/" className="flex items-center gap-2">
-              <Heart className="h-5 w-5 text-primary fill-primary" />
-              <span className="font-display text-base font-bold">MindCare</span>
+            <Link to="/" className="flex items-center">
+              <img src={logo} alt="MindCare" className="h-8 w-auto" />
             </Link>
             <div className="flex items-center gap-1">
               <Button variant="ghost" size="icon" onClick={toggleTheme} className="h-9 w-9">

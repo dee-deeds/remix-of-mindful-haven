@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Heart, Menu, X, Moon, Sun, LogOut, User } from "lucide-react";
+import { Menu, X, Moon, Sun, LogOut, User } from "lucide-react";
+import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/contexts/AuthContext";
@@ -23,9 +24,8 @@ export function Navbar() {
   return (
     <nav className="sticky top-0 z-50 border-b bg-card/80 backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link to="/" className="flex items-center gap-2">
-          <Heart className="h-7 w-7 text-primary fill-primary" />
-          <span className="font-display text-xl font-bold text-foreground">MindCare</span>
+        <Link to="/" className="flex items-center">
+          <img src={logo} alt="MindCare" className="h-10 w-auto" />
         </Link>
 
         {/* Desktop nav */}
