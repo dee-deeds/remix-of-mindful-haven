@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Heart, Mail, Lock, User, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
+import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -53,8 +54,8 @@ export default function Signup() {
     <div className="min-h-[80vh] flex items-center justify-center px-4">
       <Card className="w-full max-w-md rounded-2xl">
         <CardHeader className="text-center space-y-2">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
-            <Heart className="h-6 w-6 text-primary fill-primary" />
+          <div className="mx-auto">
+            <img src={logo} alt="MindCare" className="h-12 w-auto mx-auto" />
           </div>
           <CardTitle className="font-display text-2xl">Create Your Account</CardTitle>
           <p className="text-sm text-muted-foreground">Join MindCare to access all features</p>
