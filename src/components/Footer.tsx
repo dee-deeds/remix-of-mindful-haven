@@ -1,12 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
-import { Link, useLocation } from "react-router-dom";
 
 export function Footer() {
-  const location = useLocation();
-
-  // Hide footer on emergency page
-  if (location.pathname === "/emergency") return null;
-
   const location = useLocation();
 
   // Hide footer on emergency page

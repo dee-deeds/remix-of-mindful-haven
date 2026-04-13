@@ -467,7 +467,6 @@ export default function Dashboard() {
           </Link>
         </div>
       </div>
-    </DashboardLayout>
-    </DashboardLayout>
+    </div>
   );
 }
