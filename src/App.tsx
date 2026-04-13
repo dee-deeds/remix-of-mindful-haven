@@ -18,6 +18,7 @@ import Emergency from "./pages/Emergency";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
+import Events from "./pages/Events";
 
 const queryClient = new QueryClient();
 
