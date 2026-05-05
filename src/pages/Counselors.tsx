@@ -65,7 +65,7 @@ export default function Counselors() {
                 <div className="text-sm text-muted-foreground">{counselor.experience} experience</div>
               </div>
 
-              <Link to="/dashboard/booking">
+              <Link to={`/dashboard/booking?counselorId=${counselor.id}`}>
                 <Button className="w-full rounded-xl font-display gap-2">
                   <Calendar className="h-4 w-4" /> Book Appointment
                 </Button>

@@ -37,6 +37,61 @@ export type Database = {
           logged_at?: string
         }
       }
+      bookings: {
+        Row: {
+          id: string
+          user_id: string
+          counselor_id: number
+          counselor_name: string
+          session_type: 'video' | 'in-person' | 'chat'
+          date: string
+          time: string
+          status: 'upcoming' | 'completed' | 'cancelled'
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          counselor_id: number
+          counselor_name: string
+          session_type: 'video' | 'in-person' | 'chat'
+          date: string
+          time: string
+          status?: 'upcoming' | 'completed' | 'cancelled'
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          counselor_id?: number
+          counselor_name?: string
+          session_type?: 'video' | 'in-person' | 'chat'
+          date?: string
+          time?: string
+          status?: 'upcoming' | 'completed' | 'cancelled'
+          created_at?: string
+        }
+      }
+      event_registrations: {
+        Row: {
+          id: string
+          user_id: string
+          event_id: number
+          registered_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          event_id: number
+          registered_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          event_id?: number
+          registered_at?: string
+        }
+      }
       assessment_results: {
         Row: {
           id: string
