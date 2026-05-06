@@ -118,6 +118,107 @@ export type Database = {
           taken_at?: string
         }
       }
+      community_posts: {
+        Row: {
+          id: string
+          user_id: string
+          display_name: string
+          is_anonymous: boolean
+          content: string
+          category: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          display_name: string
+          is_anonymous?: boolean
+          content: string
+          category?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          display_name?: string
+          is_anonymous?: boolean
+          content?: string
+          category?: string
+          created_at?: string
+        }
+      }
+      community_comments: {
+        Row: {
+          id: string
+          post_id: string
+          user_id: string
+          display_name: string
+          is_anonymous: boolean
+          content: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          post_id: string
+          user_id: string
+          display_name: string
+          is_anonymous?: boolean
+          content: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          post_id?: string
+          user_id?: string
+          display_name?: string
+          is_anonymous?: boolean
+          content?: string
+          created_at?: string
+        }
+      }
+      community_likes: {
+        Row: {
+          id: string
+          post_id: string
+          user_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          post_id: string
+          user_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          post_id?: string
+          user_id?: string
+          created_at?: string
+        }
+      }
+      community_shares: {
+        Row: {
+          id: string
+          post_id: string
+          user_id: string
+          sharer_name: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          post_id: string
+          user_id: string
+          sharer_name?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          post_id?: string
+          user_id?: string
+          sharer_name?: string | null
+          created_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never
