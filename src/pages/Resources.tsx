@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Search, Bookmark, BookmarkCheck, Play, FileText, Download,
-  X, BookOpen, Clock, User,
+  BookOpen, Clock, User,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 type ResourceType = "article" | "video" | "pdf";
 
@@ -480,16 +483,44 @@ function PdfDialog({ resource, onClose }: { resource: Resource; onClose: () => v
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function Resources() {
+  const { user } = useAuth();
+  const { toast } = useToast();
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [bookmarks, setBookmarks] = useState<number[]>([]);
   const [openResource, setOpenResource] = useState<Resource | null>(null);
 
-  const toggleBookmark = (id: number) => {
-    setBookmarks((prev) => prev.includes(id) ? prev.filter((b) => b !== id) : [...prev, id]);
+  // Load bookmarks from Supabase when user is available
+  useEffect(() => {
+    if (!user) { setBookmarks([]); return; }
+    supabase
+      .from("resource_bookmarks")
+      .select("resource_id")
+      .eq("user_id", user.id)
+      .then(({ data }) => setBookmarks((data ?? []).map((b) => b.resource_id)));
+  }, [user?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const toggleBookmark = async (id: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!user) {
+      toast({ title: "Sign in required", description: "Please sign in to save bookmarks." });
+      return;
+    }
+    const already = bookmarks.includes(id);
+    // Optimistic update
+    setBookmarks((prev) => already ? prev.filter((b) => b !== id) : [...prev, id]);
+    if (already) {
+      await supabase.from("resource_bookmarks").delete().eq("user_id", user.id).eq("resource_id", id);
+    } else {
+      await supabase.from("resource_bookmarks").insert({ user_id: user.id, resource_id: id });
+      toast({ title: "Saved!", description: "Resource added to your bookmarks." });
+    }
   };
 
+  const showingBookmarks = activeCategory === "Saved";
+
   const filtered = resources.filter((r) => {
+    if (showingBookmarks) return bookmarks.includes(r.id);
     const matchesSearch = r.title.toLowerCase().includes(search.toLowerCase()) || r.desc.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = activeCategory === "All" || r.category === activeCategory;
     return matchesSearch && matchesCategory;
@@ -549,6 +580,20 @@ export default function Resources() {
               {cat}
             </Button>
           ))}
+          <Button
+            variant={activeCategory === "Saved" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setActiveCategory("Saved")}
+            className="rounded-full gap-1.5"
+          >
+            <BookmarkCheck className="h-3.5 w-3.5" />
+            Saved
+            {bookmarks.length > 0 && (
+              <span className={`rounded-full text-xs px-1.5 py-0 leading-tight ${activeCategory === "Saved" ? "bg-white/20 text-white" : "bg-primary/15 text-primary"}`}>
+                {bookmarks.length}
+              </span>
+            )}
+          </Button>
         </div>
       </div>
 
@@ -567,9 +612,9 @@ export default function Resources() {
                   </Badge>
                 </div>
                 <button
-                  onClick={() => toggleBookmark(resource.id)}
+                  onClick={(e) => toggleBookmark(resource.id, e)}
                   className="text-muted-foreground hover:text-primary transition-colors shrink-0"
-                  aria-label="Bookmark"
+                  aria-label={bookmarks.includes(resource.id) ? "Remove bookmark" : "Save bookmark"}
                 >
                   {bookmarks.includes(resource.id)
                     ? <BookmarkCheck className="h-5 w-5 text-primary" />
@@ -608,7 +653,17 @@ export default function Resources() {
 
       {filtered.length === 0 && (
         <div className="text-center py-16">
-          <p className="text-muted-foreground">No resources found. Try adjusting your search or filters.</p>
+          {showingBookmarks ? (
+            <div>
+              <BookmarkCheck className="h-12 w-12 mx-auto text-muted-foreground/30 mb-3" />
+              <p className="text-muted-foreground font-medium mb-1">No saved resources yet</p>
+              <p className="text-sm text-muted-foreground">
+                {user ? "Click the bookmark icon on any resource to save it here." : "Sign in to save resources for later."}
+              </p>
+            </div>
+          ) : (
+            <p className="text-muted-foreground">No resources found. Try adjusting your search or filters.</p>
+          )}
         </div>
       )}
 
